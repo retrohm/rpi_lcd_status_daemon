@@ -14,12 +14,12 @@ class LCD(pcd8544.LCD):
 
 	def __init__(self, backlight_pin=24):
 		RPIO.setwarnings(False)
-		PCD8544.LCD.__init__(self)
+		pcd8544.LCD.__init__(self)
 		self._backlight_pin = backlight_pin
 	
 	def initialize(self):
 		""" sets up the rpi status board pins"""
-		PCD8544.LCD.initialize(self)
+		pcd8544.LCD.initialize(self)
 		RPIO.setup(self._backlight_pin, RPIO.OUT, initial=RPIO.LOW)
 	
 	def set_backlight(self, enabled=True):
