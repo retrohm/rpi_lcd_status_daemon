@@ -300,12 +300,11 @@ class LCD(object):
 		RPIO.setup(self._reset_pin, RPIO.OUT, initial=RPIO.LOW)
 		RPIO.setup(self._chip_select_pin, RPIO.OUT, initial=RPIO.LOW)
 
-	def _tick_clock(self, tick_time=0.000001):
+	def _tick_clock(self, tick_time=0.00000025):
 		# fastest this should be is 0.00000025 as per 4 mhz max clock
 		RPIO.output(self._clock_pin, RPIO.HIGH)
 		time.sleep(tick_time)
 		RPIO.output(self._clock_pin, RPIO.LOW)
-		# might need another sleep here?
 
 	def _shift_out_byte(self, byte):
 		if byte > 0xFF:
@@ -373,14 +372,9 @@ class LCD(object):
 			self.print_char(char)
 
 	def clear_screen(self):
-		# since we are just writing all 0s and there is wrap around we can set things
-		# up and then just pull the clock a bunch of times
 		self.set_cursor(0, 0)
-		RPIO.output(self._data_command_pin, RPIO.HIGH)
-		RPIO.output(self._data_in_pin, RPIO.LOW)
 		for y in range(6):
-			for x in range(84):
-				self._tick_clock()
+			self.print_string("              ")
 
 	def initialize(self):
 		# uses BCM pin numbering
@@ -393,6 +387,8 @@ class LCD(object):
 		self._set_bias()
 		self._set_contrast()
 		self._set_display()
+		
+		time.sleep(0.00000001)
 		
 		self.clear_screen()
 		self.set_cursor(0, 0)
