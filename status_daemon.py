@@ -1,5 +1,6 @@
 import rpi_lcd
 import time
+import netifaces
 
 LCD = rpi_lcd.LCD()
 
@@ -18,4 +19,6 @@ LCD.wait_for_buttons()
 while True:
 	LCD.set_cursor(0, 0)
 	LCD.print_string(time.strftime('%X'))
+	LCD.set_cursor(0, 1)
+	LCD.print_string(netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr'])
 	time.sleep(1)
